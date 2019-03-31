@@ -1,0 +1,32 @@
+{
+  "name": "content-handler",
+  "version": "0.0.2",
+  "description": "An unified system to easily handle all your HTML/SVG contents, using simple event listeners",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "main": "content-handler.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lcfvs/content-handler.git"
+  },
+  "keywords": [
+    "HTML/SVG contents",
+    "event listeners",
+    "AJAX",
+    "Server-Sent Events",
+    "SSE",
+    "unified"
+  ],
+  "author": "lcf.vs <michael.rouges@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Lcfvs/content-handler/issues"
+  },
+  "homepage": "https://github.com/Lcfvs/content-handler#readme",
+  "optionalDependencies": {
+    "event-source-polyfill": "^1.0.5",
+    "custom-event-polyfill": "^1.0.6",
+    "@ungap/event-target": "^0.1.0"
+  }
+}
