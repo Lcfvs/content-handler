@@ -36,21 +36,27 @@ function fetch () {
   element.ownerDocument.defaultView
     .fetch(request.clone())
     .then(response => {
+      const status = response.status
+
+      if (status === 408) {
+        return delay(fetch, 1000)
+      }
+
       if (!response.ok) {
-        throw Object.assign(new Error(`Request rejected`), {
-          status: response.status
-        })
+        const error = new Error(`Request rejected with status ${status}`)
+
+        throw Object.assign(error, {status})
       }
 
       fetchers.shift()
       url = response.url || request.url
 
       return response.text()
-    })
-    .then(data => {
-      ContentHandler
-        .getByDocument(element.ownerDocument)
-        .addContainer(parse(fetcher, data, {url}))
+        .then(data => {
+          ContentHandler
+            .getByDocument(element.ownerDocument)
+            .addContainer(parse(fetcher, data, {url}))
+        })
     })
     .catch(error => {
       if (supervisor.signal.aborted) {

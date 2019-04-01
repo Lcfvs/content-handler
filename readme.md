@@ -1,23 +1,42 @@
 # <a name="reference">content-handler</a>
 
-**BETA**
-
-An unified system to easily handle all your HTML/SVG contents, using simple event listeners.
-
-Supports AJAX and Server-Sent Events
+Based `EventTarget`, the content handlers are an unified system to automate and
+simply await some DOM (HTML/SVG) contents from the server, ignoring the content
+origin, avoiding complex logic in your front code, even from AJAX requests or
+received as Server-Sent Events
 
 ## <a name="install">Install</a>
 
 `npm i content-handler`
 
+## <a name="consistency">Consistency</a>
+
+<details>
+  <summary>This tool doesn't have any real dependencies, but can need some
+  polyfills</summary>
+  
+* [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent):
+e.g. [custom-event-polyfill](https://www.npmjs.com/package/custom-event-polyfill)
+* [EventSource](https://developer.mozilla.org/en-US/docs/Web/API/EventSource):
+e.g. [event-source-polyfill](https://www.npmjs.com/package/event-source-polyfill)
+* [EventTarget](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget):
+e.g. [@ungap/event-target](https://www.npmjs.com/package/@ungap/event-target)
+</details>
+
+
+
 ## <a name="get-the-content-handler-for-a-document">Get the content handler for a document</a>
 
+<details>
+  <summary>Each document has its own unique handler</summary>
+  
 ```js
 import ContentHandler from 'content-handler'
 
 // If the document isn't provided, it uses the current window.document
 const handler = ContentHandler.getByDocument(document)
 ```
+</details>
 
 ## <a name="await-elements-from-a-handler">Await elements from a handler</a>
 
@@ -77,23 +96,26 @@ ContentHandler
   })
 ```
 
-## <a name="listen-content-targets">Listen content targets</a>
+## <a name="declare-the-controllers">Declare the controllers</a>
 
 A content handler doesn't make anything alone, to automate the fetching ou SSE
 listening, you need to tell him how to do it.
 
 It also uses the `handler.addEventListener()` and should need some controllers
-(provided or custom) to define the request behavior, make some pre- validation,
- some client optimizations before to send it to the server, etc.
+(provided or custom) to define the request behavior, make some pre-validation,
+some client optimizations before to send it to the server, etc.
 
-The provided controllers are generic as possible, **not required but recommended**,
-to avoid uncommon behaviors between browsers.
+The provided controllers are generic as possible, **not required but
+recommended**, to avoid uncommon behaviors between browsers.
 
-It shipped with 3 simple initial controllers with, for each, a default `.selector`
-to target the related elements (you can define yours), and a `.listen()` method to
-control the request.
+It shipped with 3 simple initial controllers with, for each, a default
+`.selector` to target the related elements (you can define yours), and a
+`.listen()` method to control the request.
 
 ### <a name="anchor">anchor</a>
+
+<details>
+  <summary>Listen all the anchors at once!</summary>
 
 ```js
 import ContentHandler from 'content-handler/content-handler.js'
@@ -116,9 +138,13 @@ ContentHandler
     referrer.client // set request.referrer to "about:client" by default
 ], {/* optional env object */}))
 ```
+</details>
 
 ### <a name="form">form</a>
 
+<details>
+  <summary>Listen all the forms at once!</summary>
+  
 ```js
 import ContentHandler from 'content-handler/content-handler.js'
 import form from 'content-handler/controllers/fetcher/form.js'
@@ -141,9 +167,13 @@ ContentHandler
     referrer.client // set request.referrer to "about:client" by default
 ], {/* optional env object */}))
 ```
+</details>
 
 ### <a name="sse">sse</a>
 
+<details>
+  <summary>Listen all the event sources at once!</summary>
+  
 ```js
 import ContentHandler from 'content-handler/content-handler.js'
 import sse from 'content-handler/controllers/sse/sse.js'
@@ -157,12 +187,18 @@ ContentHandler
     withCredentials.sameOrigin // allow credentials only for the current origin
   ], {/* optional env object */}))
 ```
+</details>
 
 ## <a name="make-your-own-controller">Make your own controller</a>
 
 Making your own controller is really easy, it just a function, receiving a
-request config object and returning a new one.
+request config object and returning a new one based on it.
 
+**As a best practice, you never should modify the received object!**
+
+<details>
+  <summary>A simple fetching controller</summary>
+  
 ```js
 function customFetcherController (config) {
   const {input, supervisor} = config // {element, init, input, supervisor, env}
