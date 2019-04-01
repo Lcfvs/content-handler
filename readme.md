@@ -9,11 +9,11 @@ received as Server-Sent Events
 
 `npm i content-handler`
 
-## <a name="consistency">Consistency</a>
+## <a name="browsers-support">Browsers support</a>
 
 <details>
-  <summary>This tool doesn't have any real dependencies, but can need some
-  polyfills</summary>
+  <summary>This tool doesn't have any dependencies, but can need some polyfills
+  to support the standard constructors on all browsers</summary>
   
 * [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent):
 e.g. [custom-event-polyfill](https://www.npmjs.com/package/custom-event-polyfill)
@@ -27,16 +27,14 @@ e.g. [@ungap/event-target](https://www.npmjs.com/package/@ungap/event-target)
 
 ## <a name="get-the-content-handler-for-a-document">Get the content handler for a document</a>
 
-<details>
-  <summary>Each document has its own unique handler</summary>
-  
+**Each handler handles a single document!**
+
 ```js
 import ContentHandler from 'content-handler'
 
 // If the document isn't provided, it uses the current window.document
 const handler = ContentHandler.getByDocument(document)
 ```
-</details>
 
 ## <a name="await-elements-from-a-handler">Await elements from a handler</a>
 
@@ -194,6 +192,9 @@ ContentHandler
 Making your own controller is really easy, it just a function, receiving a
 request config object and returning a new one based on it.
 
+The unique difference between **AJAX**/**SSE** config objects is the
+`init`/`configuration` property
+
 **As a best practice, you never should modify the received object!**
 
 <details>
@@ -210,7 +211,13 @@ function customFetcherController (config) {
   
   return {...config}
 }
+```
+</details>
 
+<details>
+  <summary>A simple SSE controller</summary>
+  
+```js
 function customSSEController (config) {
   const {input, supervisor} = config // {configuration, element, input, supervisor, env}
   
@@ -222,6 +229,8 @@ function customSSEController (config) {
   return {...config}
 }
 ```
+</details>
+
 
 ## <a name="license">License</a>
 
