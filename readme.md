@@ -10,6 +10,10 @@ Server-Sent Events
 
 `npm i content-handler`
 
+## <a name="quick-start">Quick start</a>
+
+[Create your own content-handler based project to build your app/site in seconds!](https://github.com/Lcfvs/content-handler-quick-start)
+
 ## <a name="browsers-support">Browsers support</a>
 
 <details>
