@@ -20,6 +20,7 @@ export default class ContentHandler extends window.EventTarget {
     })
 
     delay(trigger, 0, this, this.hooks, {
+      source: document,
       target: document,
       url: url(document.documentElement)
     })
@@ -28,8 +29,8 @@ export default class ContentHandler extends window.EventTarget {
     const handler = this
 
     listen(container, {
-      DOMContentLoaded ({target, sse, url}) {
-        trigger(handler, handler.hooks, {target, sse, url})
+      DOMContentLoaded ({source, sse, target, url}) {
+        trigger(handler, handler.hooks, {source, sse, target, url})
       }
     })
   }

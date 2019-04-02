@@ -4,6 +4,7 @@ import delay from './delay.js'
 import emit from './emit.js'
 import parse from './parse.js'
 import listen from './listen.js'
+import url from './url.js'
 
 const Request = window.Request
 const fetchers = []
@@ -30,7 +31,6 @@ function fetch () {
 
   const {element, request, supervisor} = fetcher
 
-  let url = request.url
   emit(supervisor, 'fetch')
 
   element.ownerDocument.defaultView
@@ -49,13 +49,16 @@ function fetch () {
       }
 
       fetchers.shift()
-      url = response.url || request.url
+      fetcher.url = response.url || request.url || fetcher.input
 
       return response.text()
         .then(data => {
           ContentHandler
             .getByDocument(element.ownerDocument)
-            .addContainer(parse(fetcher, data, {url}))
+            .addContainer(parse(fetcher, data, {
+              source: element,
+              url: url(element, fetcher.url)
+            }))
         })
     })
     .catch(error => {

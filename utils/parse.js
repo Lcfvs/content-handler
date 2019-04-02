@@ -8,7 +8,7 @@ export default function parse (handle, html, options = {}) {
 
   body.innerHTML = html
   fragment.appendChild(body)
-  delay(emit, 0, fragment, 'DOMContentLoaded')
+  delay(emit, 0, fragment, 'DOMContentLoaded', options)
 
-  return Object.assign(fragment, options)
+  return fragment
 }

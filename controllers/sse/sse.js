@@ -5,34 +5,39 @@ import emit from '../../utils/emit.js'
 import invoke from '../../utils/invoke.js'
 import listen from '../../utils/listen.js'
 import parse from '../../utils/parse.js'
+import url from '../../utils/url.js'
 
 const EventSource = window.EventSource
 
-function handle (source) {
-  listen(source.supervisor, {
+function handle (emitter) {
+  const element = emitter.element
+
+  listen(emitter.supervisor, {
     abort () {
-      source.stop()
-      emit(source, 'aborted')
+      emitter.stop()
+      emit(emitter, 'aborted')
     }
   })
 
-  listen(source, {
+  listen(emitter, {
     message (event) {
       ContentHandler
-        .getByDocument(source.element.ownerDocument)
-        .addContainer(parse(source, event.data, {
-          sse: source
+        .getByDocument(element.ownerDocument)
+        .addContainer(parse(emitter, event.data, {
+          source: element,
+          sse: emitter,
+          url: url(element, emitter.input)
         }))
     }
   })
 }
 
 export default function sse (config) {
-  const source = new EventSource(config.input, config.configuration)
+  const emitter = new EventSource(config.input, config.configuration)
 
-  delay(handle, 0, source)
+  delay(handle, 0, emitter)
 
-  return Object.assign(source, config)
+  return Object.assign(emitter, config)
 }
 
 Object.assign(sse, {

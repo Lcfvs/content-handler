@@ -1,9 +1,10 @@
 # <a name="reference">content-handler</a>
 
-Based `EventTarget`, the content handlers are an unified system to automate and
-simply await some DOM (HTML/SVG) contents from the server, ignoring the content
-origin, avoiding complex logic in your front code, even from AJAX requests or
-received as Server-Sent Events
+Based on [EventTarget](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget),
+content handlers are an unified system to automate and simply await some DOM
+(HTML/SVG) contents from the server, ignoring the content origin, avoiding
+complex logic in your front code, even from AJAX requests or received as
+Server-Sent Events
 
 ## <a name="install">Install</a>
 
