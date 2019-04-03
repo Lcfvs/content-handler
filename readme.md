@@ -28,15 +28,15 @@ e.g. [event-source-polyfill](https://www.npmjs.com/package/event-source-polyfill
 e.g. [@ungap/event-target](https://www.npmjs.com/package/@ungap/event-target)
 </details>
 
-## <a name="how-a-content-handler-get-the-contents">How a content handler gets the contents</a>
+## <a name="how-a-content-handler-get-the-contents">How a content handler gets the contents?</a>
 
 1. Full page loading
-2. Listeners registering, based on selector events (including your controllers)
-3. Triggering the listeners on the matching elements
-4. Awaiting user events (`click` on an anchor, `submit` on a form)
-5. Triggering the controllers
+2. Register your listeners, based on selector events (including your controllers)
+3. The `ContentHandler` triggers the listeners on the matching elements
+4. Your controllers are awaiting some user events (`click` on an anchor, `submit` on a form)
+5. The `ContentSupervisor` triggers the related controllers
 6. Fetching
-7. Response parsing in a `DocumentFragment` and return to 3.
+7. The `ContentHandler` parses the response in a `DocumentFragment` and returns to step 3.
 
 
 ## <a name="get-the-content-handler-for-a-document">Get the content handler for a document</a>
@@ -203,14 +203,16 @@ ContentHandler
 
 ## <a name="make-your-own-controller">Make your own controller</a>
 
-Making your own controller is really easy, it just a function, receiving a
-request config object and returning a new one based on it.
-
-The unique difference between **AJAX**/**SSE** config objects is the
-`init`/`configuration` property
+Making your own controller is really easy, it just a function, **receiving a
+request `config` object** and **returning a new one** based on it.
 
 **As a best practice, you never should modify the received object!**
 
+For asynchronous operations, in place of returning the new `config` object,
+you can simply return a `Promise`, resolving the `config` object.
+
+The unique difference between **AJAX**/**SSE** config objects is the
+`init`/`configuration` property
 <details>
   <summary>A simple fetching controller</summary>
   
