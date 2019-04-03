@@ -28,6 +28,15 @@ e.g. [event-source-polyfill](https://www.npmjs.com/package/event-source-polyfill
 e.g. [@ungap/event-target](https://www.npmjs.com/package/@ungap/event-target)
 </details>
 
+## <a name="how-a-content-handler-get-the-contents">How a content handler gets the contents</a>
+
+1. Full page loading
+2. Listeners registering, based on selector events (including your controllers)
+3. Triggering the listeners on the matching elements
+4. Awaiting user events (`click` on an anchor, `submit` on a form)
+5. Triggering the controllers
+6. Fetching
+7. Response parsing in a `DocumentFragment` and return to 3.
 
 
 ## <a name="get-the-content-handler-for-a-document">Get the content handler for a document</a>
