@@ -6,16 +6,18 @@ import Runner from './utils/runner.js'
 export default class ContentSupervisor extends window.EventTarget {
   constructor (event, runner, callback) {
     super()
-    this.controller = new window.AbortController()
-    this.event = event
+    const supervisor = this
+
+    supervisor.controller = new window.AbortController()
+    supervisor.event = event
 
     if (event.defaultPrevented) {
-      delay(() => this.abort, 0)
+      delay(() => supervisor.abort, 0)
     }
 
     listen(runner, {
       config (event) {
-        if (event.defaultPrevented || this.aborted) {
+        if (event.defaultPrevented || supervisor.aborted) {
           return
         }
 
@@ -23,7 +25,7 @@ export default class ContentSupervisor extends window.EventTarget {
         callback(event.config)
       },
       error ({error, type}) {
-        forward(this, {error, type})
+        forward(supervisor, {error, type})
       }
     })
   }
